@@ -68,7 +68,7 @@ class Upscaler:
 
 class UpscalerVideo:
     def __init__(self, model_path, input_folder, output_folder, tile_size=256, form_video="mp4", codec_video="libx264",
-                 codec_audio="aac"):
+                 codec_audio="aac",repiat = 1):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         state_dict = torch.load(
             model_path, map_location="cpu", pickle_module=RestrictedUnpickle
@@ -86,6 +86,7 @@ class UpscalerVideo:
         self.format_video = form_video
         self.codec_video = codec_video
         self.codec_audio = codec_audio
+        self.repiat = repiat
         if self.model.input_channels == 1:
             self.channels = "grayscale"
         else:
@@ -100,9 +101,10 @@ class UpscalerVideo:
         return tensor2img(tensor)
 
     def process_frame(self, frame):
-
         frame_np = np.array(frame) / 255
-        return auto_split(frame_np, self.tile_max_size, self.__upscale)*255
+        for _ in range(self.repiat):
+            frame_np = auto_split(frame_np, self.tile_max_size, self.__upscale)
+        return frame_np*255
 
     def run(self):
         if not os.path.exists(self.output_folder):
