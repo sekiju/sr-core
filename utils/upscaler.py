@@ -102,6 +102,7 @@ class UpscalerVideo:
 
     def process_frame(self, frame):
         frame_np = np.array(frame)/255
+        frame_np = cv2.cvtColor(frame_np,cv2.COLOR_RGB2BGR)
         for _ in range(self.repiat):
             frame_np = auto_split(frame_np, self.tile_max_size, self.__upscale)
         return frame_np
