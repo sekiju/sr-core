@@ -104,7 +104,7 @@ class UpscalerVideo:
         frame_np = np.array(frame) / 255
         for _ in range(self.repiat):
             frame_np = auto_split(frame_np, self.tile_max_size, self.__upscale)
-        return frame_np*255
+        return frame_np
 
     def run(self):
         if not os.path.exists(self.output_folder):
