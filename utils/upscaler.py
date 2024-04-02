@@ -102,7 +102,7 @@ class UpscalerVideo:
     def process_frame(self, frame):
 
         frame_np = np.array(frame) / 255
-        return auto_split(frame_np, self.tile_max_size, self.__upscale)
+        return auto_split(frame_np, self.tile_max_size, self.__upscale)*255
 
     def run(self):
         if not os.path.exists(self.output_folder):
