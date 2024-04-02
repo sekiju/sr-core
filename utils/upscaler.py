@@ -96,12 +96,12 @@ class UpscalerVideo:
         tensor = img2tensor(img).unsqueeze(0).to(self.device)
 
         with torch.no_grad():
-            tensor = self.model(tensor)
+            tensor = self.model(tensor,False)
 
         return tensor2img(tensor)
 
     def process_frame(self, frame):
-        frame_np = np.array(frame) / 255
+        frame_np = np.array(frame)/255
         for _ in range(self.repiat):
             frame_np = auto_split(frame_np, self.tile_max_size, self.__upscale)
         return frame_np
